@@ -51,25 +51,23 @@ def construct_rock_wall(line: list[tuple[int,int]], grid: list[list[str]]):
         prev_x = point[0]
         prev_y = point[1]
 
+OCCUPIED = {'#', 'o'}
+
 def drip_sand(coordinate: int, grid: list[list[str]]) -> bool:
-    occupied_spaces = {'#', 'o'}
-    if grid[0][coordinate] in occupied_spaces:
+    if grid[0][coordinate] in OCCUPIED:
         return False
-    row_count = 0
     x = coordinate
     for row_count, row in enumerate(grid):
-        if row[x] in occupied_spaces:
-            if row[x-1] in occupied_spaces:
-                if row[x+1] in occupied_spaces:
-                    if grid[row_count-1][x] not in occupied_spaces:
-                        grid[row_count-1][x] = 'o'
-                        return True
-                    else:
-                        return False
-                else:
-                    x = x + 1
-            else: x = x - 1
-
+        if row[x] in OCCUPIED:
+            if row[x - 1] in OCCUPIED and row[x + 1] in OCCUPIED:
+                if grid[row_count - 1][x] not in OCCUPIED:
+                    grid[row_count - 1][x] = 'o'
+                    return True
+                return False
+            elif row[x - 1] in OCCUPIED:
+                x += 1
+            else:
+                x -= 1
     return False
 
 def print_grid(grid: list[list]):
